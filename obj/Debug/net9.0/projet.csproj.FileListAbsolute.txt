@@ -1,0 +1,14 @@
+C:\Users\quent\OneDrive\Desktop\Esilv\algo\Projet\projet\bin\Debug\net9.0\projet.exe
+C:\Users\quent\OneDrive\Desktop\Esilv\algo\Projet\projet\bin\Debug\net9.0\projet.deps.json
+C:\Users\quent\OneDrive\Desktop\Esilv\algo\Projet\projet\bin\Debug\net9.0\projet.runtimeconfig.json
+C:\Users\quent\OneDrive\Desktop\Esilv\algo\Projet\projet\bin\Debug\net9.0\projet.dll
+C:\Users\quent\OneDrive\Desktop\Esilv\algo\Projet\projet\bin\Debug\net9.0\projet.pdb
+C:\Users\quent\OneDrive\Desktop\Esilv\algo\Projet\projet\obj\Debug\net9.0\projet.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\quent\OneDrive\Desktop\Esilv\algo\Projet\projet\obj\Debug\net9.0\projet.AssemblyInfoInputs.cache
+C:\Users\quent\OneDrive\Desktop\Esilv\algo\Projet\projet\obj\Debug\net9.0\projet.AssemblyInfo.cs
+C:\Users\quent\OneDrive\Desktop\Esilv\algo\Projet\projet\obj\Debug\net9.0\projet.csproj.CoreCompileInputs.cache
+C:\Users\quent\OneDrive\Desktop\Esilv\algo\Projet\projet\obj\Debug\net9.0\projet.dll
+C:\Users\quent\OneDrive\Desktop\Esilv\algo\Projet\projet\obj\Debug\net9.0\refint\projet.dll
+C:\Users\quent\OneDrive\Desktop\Esilv\algo\Projet\projet\obj\Debug\net9.0\projet.pdb
+C:\Users\quent\OneDrive\Desktop\Esilv\algo\Projet\projet\obj\Debug\net9.0\projet.genruntimeconfig.cache
+C:\Users\quent\OneDrive\Desktop\Esilv\algo\Projet\projet\obj\Debug\net9.0\ref\projet.dll
