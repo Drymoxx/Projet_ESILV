@@ -12,3 +12,4 @@ C:\Users\quent\OneDrive\Desktop\Esilv\algo\Projet\projet\obj\Debug\net9.0\refint
 C:\Users\quent\OneDrive\Desktop\Esilv\algo\Projet\projet\obj\Debug\net9.0\projet.pdb
 C:\Users\quent\OneDrive\Desktop\Esilv\algo\Projet\projet\obj\Debug\net9.0\projet.genruntimeconfig.cache
 C:\Users\quent\OneDrive\Desktop\Esilv\algo\Projet\projet\obj\Debug\net9.0\ref\projet.dll
+C:\Users\quent\OneDrive\Desktop\Esilv\algo\Projet\projet\obj\Debug\net9.0\projet.sourcelink.json
