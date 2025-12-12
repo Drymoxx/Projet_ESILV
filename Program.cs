@@ -9,6 +9,8 @@ namespace projet
         static void Main(string[] args)
         {
             Dictionnaire dico = new Dictionnaire();
+            dico.Tri_Fusion();
+            dico.AfficherDictionnaire();
             Console.WriteLine(dico.ToString());
         }
     }

@@ -13,16 +13,18 @@ namespace projet
         private List<string> mots;
         public Dictionnaire()
         {
-            string contenu = File.ReadAllText("Mots_Français.txt");
-            mots = contenu.Split(' ').ToList();
+            using (StreamReader a = new StreamReader("dictionnaire.txt"))
+            {
+                mots = new List<string>(a.ReadToEnd().Split(' '));
+            }
         }
-        /*public void AfficherDictionnaire()
+        public void AfficherDictionnaire() //Méthode de test
         {
             for(int i = 0; i < mots.Count; i++)
             {
                 Console.Write($"{mots[i]} ");
             }
-        }*/
+        }
         public override string ToString()
         {
             string result = "L'ensemble des mots du dictionnaire est en Français\n";
@@ -41,6 +43,80 @@ namespace projet
                 result = result + "Il y a " + count + " mots qui commencent par la lettre " + lettre + "\n";
             }
             return result;
+        }
+        public bool RechDichoRecursif(string mot, List<string> liste = null)
+        {
+            if (liste == null)
+            {
+                liste = mots;
+            }
+            if (liste.Count == 0)
+            {
+                return false;
+            }
+            int milieu = liste.Count / 2;
+            if (mot == liste[milieu])
+            {
+                return true;
+            }
+            else if (string.Compare(mot, liste[milieu]) < 0)
+            {
+                return RechDichoRecursif(mot, liste.GetRange(0, milieu));
+            }
+            else
+            {
+                return RechDichoRecursif(mot, liste.GetRange(milieu + 1, liste.Count - milieu - 1));
+            }
+        }
+        public void Tri_Fusion()
+        {
+            mots = Tri_FusionRec(mots);
+        }
+        public List<string> Tri_FusionRec(List<string> tab = null)
+        {
+            if (tab == null)
+            {
+                tab = mots;
+            }
+            if (tab.Count <= 1)
+            {
+                return tab;
+            }
+            int milieu = tab.Count / 2;
+            List<string> gauche = tab.GetRange(0, milieu);
+            List<string> droite = tab.GetRange(milieu, tab.Count - milieu);
+            gauche = Tri_FusionRec(gauche);
+            droite = Tri_FusionRec(droite);
+            return fusionner(gauche, droite);
+        }
+        public List<string> fusionner(List<string> gauche, List<string> droite)
+        {
+            List<string> resultat = new List<string>();
+            int i = 0, j = 0;
+            while (i < gauche.Count && j < droite.Count)
+            {
+                if (string.Compare(gauche[i], droite[j]) <= 0)
+                {
+                    resultat.Add(gauche[i]);
+                    i++;
+                }
+                else
+                {
+                    resultat.Add(droite[j]);
+                    j++;
+                }
+            }
+            while (i < gauche.Count)
+            {
+                resultat.Add(gauche[i]);
+                i++;
+            }
+            while (j < droite.Count)
+            {
+                resultat.Add(droite[j]);
+                j++;
+            }
+            return resultat;
         }
     }
 }
