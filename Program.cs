@@ -8,10 +8,18 @@ namespace projet
     {
         static void Main(string[] args)
         {
-            Dictionnaire dico = new Dictionnaire();
-            dico.Tri_Fusion();
-            dico.AfficherDictionnaire();
-            Console.WriteLine(dico.ToString());
+            int duree = 10;
+            DateTime fin = DateTime.Now.AddSeconds(duree);
+
+            while (DateTime.Now < fin)
+            {
+                TimeSpan restant = fin - DateTime.Now;
+                Console.Clear();
+                Console.WriteLine($"Temps restant : {restant.Seconds} s");
+                Thread.Sleep(1000);
+            }
+
+            Console.WriteLine("Temps écoulé !");
         }
     }
 }
