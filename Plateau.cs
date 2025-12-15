@@ -16,7 +16,6 @@ namespace projet
         }
         public Plateau(string nomFile)
         {
-            plateau = new char[taille, taille];
             ToRead(nomFile);
         }
         public void InitialiserPlateau()
@@ -24,18 +23,22 @@ namespace projet
             Random r = new Random();
             int a;
             Liste_Lettre liste = new Liste_Lettre();
+            List<Lettre> list = new List<Lettre>();
+            for (int i = 0; i < 26; i++)
+            {
+                while(liste.Liste[i].Occurence >= 0)
+                {
+                    list.Add(liste.Liste[i]);
+                    liste.Liste[i].Occurence--;
+                }
+            }
             for (int i = 0; i < taille; i++)
             {
                 for (int j = 0; j < taille; j++)
                 {
-                    a = r.Next(0, liste.Liste.Count);
-                    if(liste.Liste[a].Occurence == 0)
-                    {
-                        liste.Liste.RemoveAt(a);
-                        a = r.Next(0, liste.Liste.Count);
-                    }
-                    plateau[i, j] = liste.Liste[a].Nom;
-                    liste.Liste[a].Occurence--;
+                    a = r.Next(0, list.Count);
+                    plateau[i, j] = list[a].Nom;
+                    list.RemoveAt(a);
                 }
             }
         }
@@ -69,23 +72,43 @@ namespace projet
         }
         public void ToRead(string nomfile)
         {
+            List<string> lignes = new List<string>();
             using (StreamReader reader = new StreamReader(nomfile))
             {
                 string? line;
-                List<string> tab = new List<string>();
-                while ((line = reader.ReadLine()) != null || (line = reader.ReadLine()) != "")
+                while ((line = reader.ReadLine()) != null)
                 {
-                    tab.Add(line);
-                }
-                for (int i = 0; i < taille; i++)
-                {
-                    string[] split = tab[i].Split(',');
-                    for (int j = 0; j < taille; j++)
-                    {
-                        plateau[i, j] = char.Parse(split[j]);
-                    }
+                    if (string.IsNullOrWhiteSpace(line)) continue; 
+                    lignes.Add(line.Trim());
                 }
             }
+
+            if(lignes.Count == 0)
+            {
+                throw new Exception("Fichier vide");
+            } 
+
+            taille = lignes.Count;
+            plateau = new char[taille, taille];
+
+            for(int i = 0; i < taille; i++)
+            {
+                string[] split = lignes[i].Split(',');
+                if(split.Length != taille)
+                {
+                    throw new Exception("Format de fichier incorrect");
+                }
+
+                for(int j = 0; j < taille; j++)
+                {
+                    string cell = split[j].Trim();
+                    plateau[i,j] = string.IsNullOrEmpty(cell) ? ' ' : cell[0];
+                }
+
+
+            }
+
+
         }
         public bool MotsEstPresent(string mot)
         {
@@ -96,7 +119,7 @@ namespace projet
                 if (plateau[derniereLigne, j] == mot[0])
                 {
                     bool[,] visite = new bool[taille, taille];
-                    if (MotsEstPresentRec(mot, 0, derniereLigne, j, visite, ref chemin)) return true;
+                    if (MotsEstPresentRec(mot, derniereLigne, j, 0, visite, ref chemin)) return true;
                 }
             }
             return false;
@@ -105,45 +128,48 @@ namespace projet
         {
             if (i < 0 || i >= taille || j < 0 || j >= taille) return false;
             if (visite[i, j] || plateau[i, j] != mot[count]) return false;
+            visite[i, j] = true;
             chemin.Add(new Coordonnee(i, j));
             if (count == mot.Length - 1) return true;
             else
             {
-                if (mot[count] == plateau[i, j] && !visite[i, j])
-                {
-                    visite[i, j] = true;
-                    bool trouve =   MotsEstPresentRec(mot, i + 1, j, count + 1, visite, ref chemin) ||
-                                    MotsEstPresentRec(mot, i - 1, j, count + 1, visite, ref chemin) ||
-                                    MotsEstPresentRec(mot, i, j + 1, count + 1, visite, ref chemin) ||
-                                    MotsEstPresentRec(mot, i, j - 1, count + 1, visite, ref chemin) ||
-                                    MotsEstPresentRec(mot, i + 1, j + 1, count + 1, visite, ref chemin) ||
-                                    MotsEstPresentRec(mot, i - 1, j - 1, count + 1, visite, ref chemin) ||
-                                    MotsEstPresentRec(mot, i + 1, j - 1, count + 1, visite, ref chemin) ||
-                                    MotsEstPresentRec(mot, i - 1, j + 1, count + 1, visite, ref chemin);
-                    if (!trouve) chemin.RemoveAt(chemin.Count - 1);
-                    visite[i,j] = false;
-                    return trouve;
-                }
-                else return false;
+                bool trouve =   MotsEstPresentRec(mot, i + 1, j, count + 1, visite, ref chemin) ||
+                                MotsEstPresentRec(mot, i - 1, j, count + 1, visite, ref chemin) ||
+                                MotsEstPresentRec(mot, i, j + 1, count + 1, visite, ref chemin) ||
+                                MotsEstPresentRec(mot, i, j - 1, count + 1, visite, ref chemin) ||
+                                MotsEstPresentRec(mot, i + 1, j + 1, count + 1, visite, ref chemin) ||
+                                MotsEstPresentRec(mot, i - 1, j - 1, count + 1, visite, ref chemin) ||
+                                MotsEstPresentRec(mot, i + 1, j - 1, count + 1, visite, ref chemin) ||
+                                MotsEstPresentRec(mot, i - 1, j + 1, count + 1, visite, ref chemin);
+                if (trouve) return true;
+                chemin.RemoveAt(chemin.Count - 1);
+                visite[i,j] = false;
+                return false;
             }
         }
         public void Maj_Plateau(string mot)
         {
+            mot = mot.ToUpper();
+            int derniereLigne = taille - 1;
+
             for(int x = 0; x < taille; x++)
             {
-                if(plateau[taille - 1, x] == mot[0])
+                if(plateau[derniereLigne, x] == mot[0])
                 {
                     List<Coordonnee> chemin = new List<Coordonnee>();
-                    if (MotsEstPresentRec(mot, taille - 1, x, 0, new bool[taille, taille], ref chemin))
+                    bool[,] visite = new bool[taille, taille];
+
+                    if (MotsEstPresentRec(mot, derniereLigne, x, 0, visite, ref chemin))
                     {
                         foreach (Coordonnee c in chemin)
                         {
                             plateau[c.X, c.Y] = ' ';
                         }
-                        return;
+                        break;
                     }
                 }
             }
+            
             bool changement;
             do
             {

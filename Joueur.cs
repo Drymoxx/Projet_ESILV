@@ -9,19 +9,19 @@ namespace projet
     class Joueur
     {
         private string nom;
-        private List<string>? mots;
+        private List<string> mots;
         private int score;
         public Joueur(string nom)
         {
             this.nom = nom;
-            mots = null;
+            mots = new List<string>();
             score = 0;
         }
         public string Nom
         {
             get{return nom;}
         }
-        public List<string>? Mots
+        public List<string> Mots
         {
             get{return mots;}
             set{mots = value;}

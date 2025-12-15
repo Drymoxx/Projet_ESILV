@@ -13,7 +13,7 @@ namespace projet
         private List<string> mots;
         public Dictionnaire()
         {
-            using (StreamReader a = new StreamReader("dictionnaire.txt"))
+            using (StreamReader a = new StreamReader("Mots_Français.txt"))
             {
                 mots = new List<string>(a.ReadToEnd().Split(' '));
             }

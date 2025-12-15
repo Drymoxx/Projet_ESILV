@@ -15,9 +15,11 @@ namespace projet
         private Joueur joueurCourant;
         private int tempsParTour; 
         private TimeSpan tempsTotal;
+        private int tempsPartieSecondes;
         private DateTime debutPartie;
         public Jeu(Joueur j1, Joueur j2, string nameFile, int tempspartie, int tempsParTour)
         {
+            this.tempsPartieSecondes = tempspartie;
             this.j1 = j1;
             this.j2 = j2;
             this.plateau = new Plateau(nameFile);
@@ -30,6 +32,7 @@ namespace projet
         }
         public Jeu(Joueur j1, Joueur j2, int taille, int tempspartie, int tempsParTour)
         {
+            this.tempsPartieSecondes = tempspartie;
             this.j1 = j1;
             this.j2 = j2;
             this.plateau = new Plateau(taille);
@@ -40,49 +43,111 @@ namespace projet
             tempsTotal = TimeSpan.FromSeconds(tempspartie);
             joueurCourant = j1;
         }
-      
-        /*public void LancerPartie()
+        public void LancerPartie()
         {
             debutPartie = DateTime.Now;
-
             while (!PartieTerminee())
             {
                 TourJoueur();
                 ChangerJoueur();
             }
-
-            FinPartie();
-        }*/
-
+        }
+        public void ChangerJoueur()
+        {
+            if (joueurCourant == j1)
+            {
+                joueurCourant = j2;
+            }
+            else
+            {
+                joueurCourant = j1;
+            }
+        }
         private void TourJoueur()
         {
             DateTime debutTour = DateTime.Now;
             DateTime finTour = debutTour.AddSeconds(tempsParTour);
+            string mot = "";
             while (DateTime.Now < finTour && !plateau.EstVide())
             {
+
                 Console.Clear();
                 Console.WriteLine(plateau);
-                Console.Write("Mot : ");
+                Console.WriteLine($"Joueur : {joueurCourant.Nom} | Score : {joueurCourant.Score}");
+                int restant = tempsPartieSecondes - (int)(DateTime.Now - debutPartie).TotalSeconds;
+                if (restant < 0) restant = 0;
+                
+                Console.WriteLine($"Temps restant (partie) : {restant}s | Temps restant (tour) : {(int)(finTour - DateTime.Now).TotalSeconds}s");
+                Console.Write("Mot : " + mot);
+
                 if (Console.KeyAvailable)
                 {
-                    ConsoleKeyInfo key = Console.ReadKey(true);
-                    if (dictionnaire.RechDichoRecursif(key.KeyChar.ToString()) && plateau.MotsEstPresent(key.KeyChar.ToString()))
+                    var touche = Console.ReadKey(intercept:true);
+
+                    if (touche.Key == ConsoleKey.Enter)
                     {
-                        plateau.Maj_Plateau(key.KeyChar.ToString());
-                        List<Lettre> new_mot = StringToLettre(key.KeyChar.ToString());
-                        for (int i = 0; i < new_mot.Count; i++)
+                        string motSaisi = mot.Trim().ToUpper();
+                        mot = "";
+
+                        if (motSaisi.Length < 2)
                         {
-                            joueurCourant.Add_Score(new_mot[i].Poids);
+                            Console.WriteLine("\nMot trop court.");
+                            System.Threading.Thread.Sleep(700);
+                            continue;
                         }
+
+                        if (joueurCourant.Mots != null && joueurCourant.Contient(motSaisi))
+                        {
+                            Console.WriteLine("\nDéjà trouvé !");
+                            System.Threading.Thread.Sleep(700);
+                            continue;
+                        }
+
+                        if (!plateau.MotsEstPresent(motSaisi))
+                        {
+                            Console.WriteLine("\nPas sur le plateau.");
+                            System.Threading.Thread.Sleep(700);
+                            continue;
+                        }
+
+                        if (!dictionnaire.RechDichoRecursif(motSaisi))
+                        {
+                            Console.WriteLine("\nPas dans le dictionnaire.");
+                            System.Threading.Thread.Sleep(700);
+                            continue;
+                        }
+
+                        plateau.Maj_Plateau(motSaisi);
+
+                        int score = 0;
+                        foreach (Lettre l in StringToLettre(motSaisi))
+                            score += l.Poids;
+
+                        joueurCourant.Add_Score(score);
+
+                        if (joueurCourant.Mots == null) joueurCourant.Mots = new List<string>();
+                        joueurCourant.Mots.Add(motSaisi);
+
+                        Console.WriteLine($"\nMot valide ! (+{score})");
+                        System.Threading.Thread.Sleep(900);
+                        break; 
+                    }
+                    else if (touche.Key == ConsoleKey.Backspace )
+                    {
+                        if(mot.Length > 0)
+                            mot = mot.Substring(0, mot.Length - 1);
                     }
                     else
                     {
-                        Console.WriteLine("Mot invalide");
-                        Thread.Sleep(800);
+                        if(char.IsLetter(touche.KeyChar))
+                            mot += touche.KeyChar;
                     }
                 }
+                System.Threading.Thread.Sleep(10); 
+                
             }
         }
+
         private List<Lettre> StringToLettre(string mot)
         {
             mot = mot.ToUpper();
@@ -178,7 +243,8 @@ namespace projet
         }
         public bool PartieTerminee()
         {
-            if(plateau.EstVide() || tempsTotal.TotalSeconds <= 0) return true;
+            TimeSpan ecoule = DateTime.Now - debutPartie;
+            if (plateau.EstVide() || ecoule.TotalSeconds >= tempsPartieSecondes) return true;
             return false;
         }
     }

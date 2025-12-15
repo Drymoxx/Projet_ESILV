@@ -12,20 +12,18 @@ namespace projet
         public Liste_Lettre()
         {
             liste = new List<Lettre>();
-            List<string> tab = new List<string>();
+
             using (StreamReader a = new StreamReader("Lettre.txt"))
             {
                 string? line;
-                while ((line = a.ReadLine()) != null || (line = a.ReadLine()) != "")
+                while ((line = a.ReadLine()) != null)
                 {
-                    tab.Add(line);
+                    if (string.IsNullOrWhiteSpace(line)) continue;
+                    liste.Add(new Lettre(line));
                 }
             }
-            foreach (string s in tab)
-            {
-                liste.Add(new Lettre(s));
-            }
         }
+        
         public List<Lettre> Liste
         {
             get { return liste; }
