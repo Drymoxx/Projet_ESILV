@@ -1,13 +1,22 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+
+
+//Classe représentant le plateau de jeu
+//Gère l'initialisation, l'affichage, la sauvegarde et le chargement du plateau
+//Fournit des méthodes pour vérifier la présence de mots et mettre à jour le plateau
+//Utilise une grille carrée de caractères pour représenter les lettres sur le plateau
+
 namespace projet
 {
     class Plateau
     {
+        //Attributs
         private int taille;
         private char[,] plateau;
 
+        //Constructeurs
         public Plateau(int taille)
         {
             this.taille = taille;
@@ -18,6 +27,10 @@ namespace projet
         {
             ToRead(nomFile);
         }
+
+        //Méthodes
+
+        //Initialise le plateau avec des lettres aléatoires en respectant les occurrences définies
         public void InitialiserPlateau()
         {
             Random r = new Random();
@@ -42,6 +55,8 @@ namespace projet
                 }
             }
         }
+
+        //Retourne un affichage textuelle du plateau
         public override string ToString()
         {
             string s = "";
@@ -55,6 +70,8 @@ namespace projet
             }
             return s;
         }
+
+        //Sauvegarde le plateau dans un fichier texte
         public void ToFile(string nomfile)
         {
             using (StreamWriter writer = new StreamWriter(nomfile))
@@ -70,6 +87,12 @@ namespace projet
                 }
             }
         }
+
+        //Charge le plateau à partir d'un fichier texte
+        //Le fichier doit contenir une grille carrée de caractères séparés par des virgules
+        //Chaque ligne du fichier représente une ligne du plateau
+        //Les espaces vides sont représentés par des espaces dans le fichier
+        //Lance une exception si le format du fichier est incorrect
         public void ToRead(string nomfile)
         {
             List<string> lignes = new List<string>();
@@ -110,6 +133,8 @@ namespace projet
 
 
         }
+
+        //Vérifie si un mot est présent sur le plateau en utilisant une recherche récursive
         public bool MotsEstPresent(string mot)
         {
             List<Coordonnee> chemin = new List<Coordonnee>();
@@ -124,6 +149,9 @@ namespace projet
             }
             return false;
         }
+
+        //Méthode récursive pour vérifier la présence d'un mot à partir d'une position donnée
+        //Utilise une matrice de visites pour éviter de revisiter les mêmes cellules
         private bool MotsEstPresentRec(string mot, int i, int j, int count, bool[,] visite, ref List<Coordonnee> chemin)
         {
             if (i < 0 || i >= taille || j < 0 || j >= taille) return false;
@@ -147,6 +175,8 @@ namespace projet
                 return false;
             }
         }
+
+        //Met à jour le plateau en supprimant les lettres du mot trouvé et en faisant tomber les lettres au-dessus
         public void Maj_Plateau(string mot)
         {
             mot = mot.ToUpper();
@@ -188,6 +218,8 @@ namespace projet
                 }
             } while (changement);
         }
+
+        //Vérifie si le plateau est vide (toutes les cellules sont des espaces)
         public bool EstVide()
         {
             for(int i = 0; i < taille; i++)

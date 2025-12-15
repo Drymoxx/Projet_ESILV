@@ -3,12 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+
+//Classe représentant une liste de lettres utilisées dans le jeu
+//Charge les lettres à partir d'un fichier texte et les stocke dans une liste
+
 namespace projet
 {
     class Liste_Lettre
     {
+        //Attributs
         private List<Lettre> liste;
 
+        //Constructeur
         public Liste_Lettre()
         {
             liste = new List<Lettre>();
@@ -23,6 +29,8 @@ namespace projet
                 }
             }
         }
+
+        //Propriétés
         
         public List<Lettre> Liste
         {

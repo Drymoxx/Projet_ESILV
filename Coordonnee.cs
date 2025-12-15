@@ -1,5 +1,8 @@
 using System;
 
+//Classe représentant une coordonnée sur le plateau de jeu avec des valeurs x et y
+//Utilisée pour localiser les positions des lettres et des mots
+
 namespace projet
 {
     class Coordonnee

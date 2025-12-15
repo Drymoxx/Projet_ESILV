@@ -6,11 +6,22 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
+
+//Classe représentant le dictionnaire de mots utilisés dans le jeu
+//Permet de vérifier la validité des mots joués par les joueurs
+//Implémente des méthodes de recherche et de tri pour gérer efficacement les mots
+//Le dictionnaire est initialisé à partir d'un fichier texte contenant les mots en français
+//Utilise la recherche dichotomique pour vérifier l'existence d'un mot
+//Utilise le tri fusion pour organiser les mots dans une liste triée
+
 namespace projet
 {
     class Dictionnaire
     {
+        //Attributs
         private List<string> mots;
+
+        //Constructeur
         public Dictionnaire()
         {
             using (StreamReader a = new StreamReader("Mots_Français.txt"))
@@ -18,6 +29,10 @@ namespace projet
                 mots = new List<string>(a.ReadToEnd().Split(' '));
             }
         }
+
+        //Méthodes
+
+        //Affiche tous les mots du dictionnaire (à des fins de test)
         public void AfficherDictionnaire() //Méthode de test
         {
             for(int i = 0; i < mots.Count; i++)
@@ -25,6 +40,8 @@ namespace projet
                 Console.Write($"{mots[i]} ");
             }
         }
+
+        //Retourne une représentation textuelle du dictionnaire avec le nombre de mots par lettre initiale
         public override string ToString()
         {
             string result = "L'ensemble des mots du dictionnaire est en Français\n";
@@ -44,6 +61,8 @@ namespace projet
             }
             return result;
         }
+
+        //Recherche dichotomique récursive pour trier le dictionnaire
         public bool RechDichoRecursif(string mot, List<string> liste = null)
         {
             if (liste == null)
@@ -68,6 +87,8 @@ namespace projet
                 return RechDichoRecursif(mot, liste.GetRange(milieu + 1, liste.Count - milieu - 1));
             }
         }
+
+        //Tri fusion pour trier et fusionner la liste de mots
         public void Tri_Fusion()
         {
             mots = Tri_FusionRec(mots);

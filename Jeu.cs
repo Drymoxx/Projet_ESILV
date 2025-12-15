@@ -4,10 +4,13 @@ using System.Linq;
 using System.Security;
 using System.Text;
 
+//Classe principale gérant le déroulement d'une partie
+
 namespace projet
 {
     class Jeu
     {
+        //Attributs
         private Plateau plateau;
         private Dictionnaire dictionnaire;
         private Joueur j1;
@@ -17,6 +20,8 @@ namespace projet
         private TimeSpan tempsTotal;
         private int tempsPartieSecondes;
         private DateTime debutPartie;
+
+        //Constructeurs
         public Jeu(Joueur j1, Joueur j2, string nameFile, int tempspartie, int tempsParTour)
         {
             this.tempsPartieSecondes = tempspartie;
@@ -30,6 +35,7 @@ namespace projet
             tempsTotal = TimeSpan.FromSeconds(tempspartie);
             joueurCourant = j1;
         }
+
         public Jeu(Joueur j1, Joueur j2, int taille, int tempspartie, int tempsParTour)
         {
             this.tempsPartieSecondes = tempspartie;
@@ -43,6 +49,10 @@ namespace projet
             tempsTotal = TimeSpan.FromSeconds(tempspartie);
             joueurCourant = j1;
         }
+
+        //Méthodes
+
+        //Lance la partie et gère le déroulement des tours
         public void LancerPartie()
         {
             debutPartie = DateTime.Now;
@@ -52,6 +62,8 @@ namespace projet
                 ChangerJoueur();
             }
         }
+
+        //Change le joueur courant à la fin d'un tour
         public void ChangerJoueur()
         {
             if (joueurCourant == j1)
@@ -63,6 +75,8 @@ namespace projet
                 joueurCourant = j1;
             }
         }
+
+        //Gère le tour d'un joueur avec la saisie de mots et le chronomètre
         private void TourJoueur()
         {
             DateTime debutTour = DateTime.Now;
@@ -147,6 +161,8 @@ namespace projet
                 
             }
         }
+
+        //Convertit une chaîne de caractères en une liste de lettres
 
         private List<Lettre> StringToLettre(string mot)
         {
@@ -241,6 +257,8 @@ namespace projet
             }
             return new_mot;
         }
+
+        //Vérifie si la partie est terminée (temps écoulé ou plateau vide)
         public bool PartieTerminee()
         {
             TimeSpan ecoule = DateTime.Now - debutPartie;

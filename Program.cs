@@ -2,12 +2,17 @@
 using System.IO;
 using System.Collections.Generic;
 
+
+//Classe principale gérant le déroulement d'une partie
+//Permet de configurer les joueurs, le plateau, le dictionnaire et de gérer les tours
 namespace projet
 {
     class Program
     {
+        //Méthode principale démarrant le jeu et affichant le menu
         static void Main(string[] args)
         {
+            //Menu principal
             while(true)
             {
                 Console.Clear();
@@ -101,6 +106,8 @@ namespace projet
             }
         }
         
+
+        //Méthode utilitaire pour afficher un message et attendre une entrée utilisateur
         static void Pause(string message)
         {
             Console.WriteLine(message);
@@ -108,6 +115,8 @@ namespace projet
             Console.ReadLine();
         }
 
+        //Méthode utilitaire pour lire une entrée non vide
+        //Réaffiche la demande tant que l'entrée est invalide
         static string ReadNonEmpty(string prompt)
         {
             while(true)
@@ -122,6 +131,8 @@ namespace projet
             }
         }
 
+        //Méthode utilitaire pour lire un entier supérieur ou égal à une valeur minimale
+        //Réaffiche la demande tant que l'entrée est invalide
         static int ReadIntMin(string prompt, int min)
         {
             while(true)
